@@ -1,0 +1,34 @@
+# Known System One servers.
+# Notes describe differences. They do not change spec/v1.
+#
+# baseUrl is null when the caller supplies a host (local or self-hosted).
+# authEnv is the environment variable name clients conventionally read.
+# authEnv is null when the server does not use a hosted key.
+
+providers:
+  - id: jev
+    operator: TypeSafe AI
+    baseUrl: https://api.typesafe.ai
+    defaultModel: jev-latest
+    authEnv: TYPESAFE_API_KEY
+    notes: >
+      Origin of the wire format this draft follows. Hosted only.
+
+  - id: laya
+    operator: Laya Studio
+    baseUrl: https://api.laya.studio
+    defaultModel: english
+    authEnv: LAYA_API_KEY
+    notes: >
+      Accepts a Jev model id and ignores it. Context is shorter than a typical
+      Jev request. Responses may include routing and action. Clients ignore
+      those fields.
+
+  - id: kev
+    operator: self-hosted
+    baseUrl: null
+    defaultModel: kev-latest
+    authEnv: null
+    notes: >
+      Local server. The TypeSafe client can point at it by changing the base
+      URL. Responses may include latency_ms. Score rubrics may exceed 10 levels.

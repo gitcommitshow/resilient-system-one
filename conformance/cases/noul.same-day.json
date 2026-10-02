@@ -1,0 +1,41 @@
+{
+  "id": "noul.same-day",
+  "description": "A noul answer is the probability that the answer is yes.",
+  "request": {
+    "state": "The card was charged twice this morning. Please reverse one charge today.",
+    "model": "example",
+    "questions": {
+      "same_day": {
+        "type": "noul",
+        "instructions": "Does the message ask for something to happen today?",
+        "criteria": {
+          "true": "A same-day deadline is stated",
+          "false": "No time pressure is stated"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "model": "example-1.0.0",
+      "answers": {
+        "same_day": {
+          "type": "noul",
+          "noul": 0.91
+        }
+      },
+      "usage": {
+        "input_tokens": 42,
+        "output_tokens": 4
+      },
+      "latency_ms": 18
+    }
+  },
+  "assert": {
+    "model": "example-1.0.0",
+    "answers.same_day.type": "noul",
+    "answers.same_day.noul": 0.91,
+    "usage.input_tokens": 42
+  }
+}
