@@ -36,6 +36,8 @@ const result = await client.evaluate({
 });
 ```
 
+The same request is available as `client.systemOne({ model, state, questions })`, which matches the TypeSafe client. Pass `baseURL` on the constructor if that is the option name you already use.
+
 Change `baseUrl` and `model` to call another server. Hosts we know about are in [registry/providers.yaml](registry/providers.yaml).
 
 ## Repository

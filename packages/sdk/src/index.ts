@@ -71,8 +71,18 @@ export interface EvaluateResponse {
 
 export interface SystemOneClientOptions {
   apiKey: string;
-  baseUrl: string;
-  model: string;
+  /**
+   * API root. Trailing slashes are removed before `/v1/systemone` is appended.
+   * `baseURL` is the same option, for clients moving over from the TypeSafe SDK.
+   */
+  baseUrl?: string;
+  baseURL?: string;
+  /**
+   * Model used when a request omits `model`.
+   * `defaultModel` is the TypeSafe name for the same option.
+   */
+  model?: string;
+  defaultModel?: string;
   /** Replaces global fetch. Tests pass a stub here. */
   fetch?: (url: string, init?: RequestInit) => Promise<Response>;
 }
@@ -97,6 +107,14 @@ export class SystemOneClient {
 
   /** Evaluate state against typed questions and return the parsed body. */
   async evaluate(input: EvaluateInput): Promise<EvaluateResponse> {
+    return this.systemOne(input);
+  }
+
+  /**
+   * Same request as {@link SystemOneClient.evaluate}.
+   * Named to match TypeSafe's `client.systemOne({ model, state, questions })`.
+   */
+  async systemOne(input: EvaluateInput): Promise<EvaluateResponse> {
     if (!this.options.apiKey) {
       throw new SystemOneError("apiKey is required");
     }
@@ -106,7 +124,12 @@ export class SystemOneClient {
       throw new SystemOneError("fetch is not available");
     }
 
-    const baseUrl = this.options.baseUrl.replace(/\/+$/, "");
+    const baseUrl = resolveBaseUrl(this.options);
+    const model = input.model ?? this.options.model ?? this.options.defaultModel;
+    if (!model) {
+      throw new SystemOneError("model is required");
+    }
+
     const response = await fetchFn(`${baseUrl}/v1/systemone`, {
       method: "POST",
       headers: {
@@ -116,7 +139,7 @@ export class SystemOneClient {
       },
       body: JSON.stringify({
         state: input.state,
-        model: input.model ?? this.options.model,
+        model,
         questions: input.questions,
       }),
     });
@@ -138,6 +161,20 @@ export class SystemOneClient {
 
     return body;
   }
+}
+
+/** Picks `baseUrl` or TypeSafe's `baseURL` and drops a trailing slash. */
+function resolveBaseUrl(options: SystemOneClientOptions): string {
+  const baseUrl = firstNonBlank(options.baseUrl, options.baseURL);
+  if (!baseUrl) {
+    throw new SystemOneError("baseUrl is required");
+  }
+  return baseUrl.replace(/\/+$/, "");
+}
+
+/** First string that has non-whitespace content. */
+function firstNonBlank(...values: Array<string | undefined>): string | undefined {
+  return values.find((value) => value !== undefined && value.trim() !== "");
 }
 
 /** Checks the three fields every conforming evaluate response carries. */

@@ -24,4 +24,24 @@ const result = await client.evaluate({
 console.log(result.answers.same_day);
 ```
 
-Point `baseUrl` at another System One server to switch models. Known hosts are listed in [registry/providers.yaml](../../registry/providers.yaml). The client does not retry.
+`systemOne` is the same call. Use it when you are moving a TypeSafe client over: pass `baseURL` on the client, and pass `model` on the request.
+
+```ts
+const client = new SystemOneClient({
+  apiKey: process.env.OPENROUTER_API_KEY ?? "",
+  baseURL: "https://openrouter.ai/api",
+});
+
+const result = await client.systemOne({
+  model: "jev-1.13",
+  state: "I was charged twice for my subscription.",
+  questions: {
+    refund: {
+      type: "noul",
+      instructions: "Is the customer asking for money back?",
+    },
+  },
+});
+```
+
+`baseUrl` and `model` on the client still work. `defaultModel` is accepted as another name for the client model. Point `baseUrl` at another System One server to switch models. Known hosts are listed in [registry/providers.yaml](../../registry/providers.yaml). The client does not retry.

@@ -68,6 +68,68 @@ describe("SystemOneClient", () => {
   });
 });
 
+describe("SystemOneClient.systemOne", () => {
+  afterEach(() => sinon.restore());
+
+  it("posts the TypeSafe call shape: baseURL plus model on the request", async () => {
+    const fetchStub = sinon.stub().resolves(jsonResponse(200, noulBody));
+    const client = new SystemOneClient({
+      apiKey: "test-key",
+      baseURL: "https://openrouter.ai/api/",
+      fetch: fetchStub,
+    });
+
+    const result = await client.systemOne({
+      model: "jev-1.13",
+      state: "I was charged twice.",
+      questions: { refund: { type: "noul", instructions: "Is the customer asking for money back?" } },
+    });
+
+    expect(result.answers.same_day).to.deep.equal({ type: "noul", noul: 0.91 });
+    const [url, init] = fetchStub.firstCall.args;
+    expect(url).to.equal("https://openrouter.ai/api/v1/systemone");
+    expect(JSON.parse(init.body).model).to.equal("jev-1.13");
+  });
+
+  it("throws when neither the client nor the request sets a model", async () => {
+    const client = new SystemOneClient({
+      apiKey: "test-key",
+      baseURL: "https://openrouter.ai/api",
+      fetch: sinon.stub(),
+    });
+
+    try {
+      await client.systemOne({
+        state: "hello",
+        questions: { refund: { type: "noul" } },
+      });
+      expect.fail("expected SystemOneError");
+    } catch (error) {
+      expect(error).to.be.instanceOf(SystemOneError);
+      expect((error as SystemOneError).message).to.equal("model is required");
+    }
+  });
+
+  it("throws when baseUrl and baseURL are both missing", async () => {
+    const client = new SystemOneClient({
+      apiKey: "test-key",
+      model: "jev-latest",
+      fetch: sinon.stub(),
+    });
+
+    try {
+      await client.systemOne({
+        state: "hello",
+        questions: { refund: { type: "noul" } },
+      });
+      expect.fail("expected SystemOneError");
+    } catch (error) {
+      expect(error).to.be.instanceOf(SystemOneError);
+      expect((error as SystemOneError).message).to.equal("baseUrl is required");
+    }
+  });
+});
+
 /** Builds a fetch Response whose body is JSON. */
 function jsonResponse(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {
