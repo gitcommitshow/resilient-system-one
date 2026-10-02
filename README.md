@@ -4,6 +4,12 @@ A System One model returns a judgment. You send one **state** (a ticket, a messa
 
 This repository is the independent spec for that exchange. The spec is the center. Clients and servers implement it.
 
+## Vision
+
+**Every System One provider should be able to stand in for the others.**
+
+Implement this spec and your model is compatible with Jev, Laya, Kev, and whoever follows. Write a client against this spec and a new provider is a host and a model name. Interoperability is the goal: one request, the same questions, answers a program can use, across every server that speaks System One.
+
 Current document: [spec/v1/spec.md](spec/v1/spec.md) (`1.0.0-draft`). Apache-2.0. Not affiliated with the operators below.
 
 ## The idea
@@ -81,10 +87,11 @@ Other languages document themselves in their own repositories.
 | [x] | Jev, Laya, and Kev in the registry | Add the next host. See [Servers](#servers). |
 | [ ] | Close the six open questions | One spec pull request per question. See [Spec](#spec). |
 | [ ] | TypeScript client runs `conformance/cases/` | Tests in `packages/sdk`. No live network. |
+| [ ] | Resilience patterns in the TypeScript client | Retries, circuit breakers, rate limits, and model fallback, similar to [resilient-llm](https://github.com/gitcommitshow/resilient-llm). See the [SDK roadmap](packages/sdk/README.md#roadmap). |
 | [ ] | Stable `1.0.0` | After the two rows above. |
-| [ ] | Python SDK | [Open `sdk: python`](https://github.com/gitcommitshow/system-one/issues/new?template=sdk.yml). |
-| [ ] | Go SDK | [Open `sdk: go`](https://github.com/gitcommitshow/system-one/issues/new?template=sdk.yml). |
-| [ ] | Another language | [Open an SDK issue](https://github.com/gitcommitshow/system-one/issues/new?template=sdk.yml). |
+| [ ] | Python SDK | [Open `sdk: python`](https://github.com/gitcommitshow/resilient-system-one/issues/new?template=sdk.yml). |
+| [ ] | Go SDK | [Open `sdk: go`](https://github.com/gitcommitshow/resilient-system-one/issues/new?template=sdk.yml). |
+| [ ] | Another language | [Open an SDK issue](https://github.com/gitcommitshow/resilient-system-one/issues/new?template=sdk.yml). |
 
 `spec/v2/` starts only for a wire break. Hosting and training stay with the operators.
 
@@ -113,7 +120,7 @@ Bug fixes stay in [packages/sdk](packages/sdk). `npm test` must not call a live 
 
 ### A new language
 
-1. [Open an issue](https://github.com/gitcommitshow/system-one/issues/new?template=sdk.yml) titled `sdk: <language>` (language, package name, maintainer, spec version). Wait for a maintainer to accept it.
+1. [Open an issue](https://github.com/gitcommitshow/resilient-system-one/issues/new?template=sdk.yml) titled `sdk: <language>` (language, package name, maintainer, spec version). Wait for a maintainer to accept it.
 2. Implement in your own repository against [openapi.yaml](spec/v1/openapi.yaml). Run [conformance/cases/](conformance/cases/). Ignore unknown response fields. Publish under Apache-2.0, and state the spec version. Document the client there.
 3. Open a pull request here that edits [registry/sdks.yaml](registry/sdks.yaml) only, with `conformance: passing`.
 
@@ -123,7 +130,7 @@ Bug fixes stay in [packages/sdk](packages/sdk). `npm test` must not call a live 
 
 The spec needs more than one owner. Co-maintainers are welcome for the spec, conformance, the registry, the TypeScript client, or a language SDK.
 
-Open an issue titled `maintainer: <area>` and say what you want to own. [New issue](https://github.com/gitcommitshow/system-one/issues/new).
+Open an issue titled `maintainer: <area>` and say what you want to own. [New issue](https://github.com/gitcommitshow/resilient-system-one/issues/new).
 
 ## License
 
