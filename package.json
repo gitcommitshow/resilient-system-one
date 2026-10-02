@@ -7,10 +7,10 @@
     "packages/sdk"
   ],
   "scripts": {
-    "test": "npm test -w @system-one/sdk",
-    "test:e2e": "npm run test:e2e -w @system-one/sdk",
-    "build": "npm run build -w @system-one/sdk",
-    "typecheck": "npm run typecheck -w @system-one/sdk"
+    "test": "npm test -w resilient-system-one",
+    "test:e2e": "npm run test:e2e -w resilient-system-one",
+    "build": "npm run build -w resilient-system-one",
+    "typecheck": "npm run typecheck -w resilient-system-one"
   },
   "engines": {
     "node": ">=22"

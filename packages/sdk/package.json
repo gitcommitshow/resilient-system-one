@@ -1,5 +1,5 @@
 {
-  "name": "@system-one/sdk",
+  "name": "resilient-system-one",
   "version": "0.0.0",
   "description": "TypeScript client for the System One decision API.",
   "license": "Apache-2.0",

@@ -1,9 +1,9 @@
-# @system-one/sdk
+# resilient-system-one
 
 TypeScript client for any server that implements [System One 1.0.0-draft](../../spec/v1/spec.md).
 
 ```ts
-import { SystemOneClient } from "@system-one/sdk";
+import { SystemOneClient } from "resilient-system-one";
 
 const client = new SystemOneClient({
   apiKey: process.env.SYSTEM_ONE_API_KEY ?? "",

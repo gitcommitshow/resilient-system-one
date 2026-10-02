@@ -3,7 +3,7 @@
 The client posts to whatever base URL you pass. This example targets a local server.
 
 ```ts
-import { SystemOneClient } from "@system-one/sdk";
+import { SystemOneClient } from "resilient-system-one";
 
 const client = new SystemOneClient({
   apiKey: process.env.SYSTEM_ONE_API_KEY ?? "local",
