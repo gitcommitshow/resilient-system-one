@@ -2,7 +2,7 @@
 
 ## Name
 
-The project is System One. The npm client is `@system-one/sdk`. The unscoped npm name `system-one` is already used by another client, so this client is scoped.
+The project is System One. The npm client is `resilient-system-one`. The unscoped npm name `system-one` is already used by another client.
 
 The protocol version (`spec/v1`, currently `1.0.0-draft`) is not the package version.
 

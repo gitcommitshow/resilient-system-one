@@ -7,13 +7,13 @@ The spec is [spec/v1/spec.md](spec/v1/spec.md) (`1.0.0-draft`). The machine-read
 ## Install
 
 ```bash
-npm install @system-one/sdk
+npm install resilient-system-one
 ```
 
 The package is not published yet. Until the first release, depend on this repository.
 
 ```ts
-import { SystemOneClient } from "@system-one/sdk";
+import { SystemOneClient } from "resilient-system-one";
 
 const client = new SystemOneClient({
   apiKey: process.env.SYSTEM_ONE_API_KEY ?? "",
@@ -45,14 +45,14 @@ Change `baseUrl` and `model` to call another server. Hosts we know about are in 
 | [spec/](spec/) | The standard. `spec.md` wins if it disagrees with the OpenAPI file. |
 | [conformance/](conformance/) | JSON cases every client must accept. |
 | [registry/](registry/) | Known servers and known SDKs. |
-| [packages/sdk](packages/sdk) | Official TypeScript client, `@system-one/sdk`. |
+| [packages/sdk](packages/sdk) | Official TypeScript client, `resilient-system-one`. |
 | [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) | How to change the spec, register a server, or add a language. |
 
 ## SDKs
 
 | Language | Package | Status |
 | --- | --- | --- |
-| TypeScript | `@system-one/sdk` | Official, in this repo. Conformance runner still pending. |
+| TypeScript | `resilient-system-one` | Official, in this repo. Conformance runner still pending. |
 
 Another language starts in its own repository, passes `conformance/cases/`, and is listed with a registry-only pull request. The steps are in [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).
 

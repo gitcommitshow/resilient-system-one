@@ -26,7 +26,7 @@ A new language starts outside this repository.
 
 1. Open an issue with the title `sdk: <language>`. Include the language, the package name on that registry, the maintainer, and the spec version (`1.0.0-draft` or later). Wait for a maintainer to accept it before adding code to this repo.
 2. Implement against `spec/v1/openapi.yaml`. Load `conformance/cases/` in that project's tests. Send `state`, `model`, and `questions` to `{baseUrl}/v1/systemone`. Ignore unknown response fields.
-3. Publish under Apache-2.0. The package states the spec version it implements. Prefer the name `system-one` when that registry name is free. It is already taken on npm and on PyPI, so a new client on those registries needs a free name. The official TypeScript name stays `@system-one/sdk`.
+3. Publish under Apache-2.0. The package states the spec version it implements. The npm name `system-one` is already taken, so the official TypeScript client is `resilient-system-one`. Another registry uses that name when it is free.
 4. Open a pull request here that changes only `registry/sdks.yaml`. The root README stays high level. Document the client in its own repository.
 
 ```yaml

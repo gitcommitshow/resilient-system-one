@@ -4,7 +4,7 @@
   "packages": {
     "packages/sdk": {
       "release-type": "node",
-      "package-name": "@system-one/sdk",
+      "package-name": "resilient-system-one",
       "component": "sdk"
     }
   }
