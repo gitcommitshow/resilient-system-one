@@ -103,7 +103,12 @@ export class SystemOneError extends Error {
  * The same questions work across servers. Change baseUrl and model to switch.
  */
 export class SystemOneClient {
-  constructor(private readonly options: SystemOneClientOptions) {}
+  private readonly options: SystemOneClientOptions;
+
+  /** Stores the client settings used by every evaluate call. */
+  constructor(options: SystemOneClientOptions) {
+    this.options = options;
+  }
 
   /** Evaluate state against typed questions and return the parsed body. */
   async evaluate(input: EvaluateInput): Promise<EvaluateResponse> {
