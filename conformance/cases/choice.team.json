@@ -1,0 +1,48 @@
+{
+  "id": "choice.team",
+  "description": "A choice answer names one option and gives a probability for every option.",
+  "request": {
+    "state": "The shoes arrived two weeks late and the receipt shows two charges.",
+    "model": "example",
+    "questions": {
+      "team": {
+        "type": "choice",
+        "instructions": "Which team should handle this first?",
+        "criteria": {
+          "shipping": "Late, lost, or damaged delivery",
+          "billing": "Duplicate charges and refunds",
+          "other": null
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "model": "example-1.0.0",
+      "answers": {
+        "team": {
+          "type": "choice",
+          "choice": "billing",
+          "confidence": 0.21,
+          "probabilities": {
+            "shipping": 0.28,
+            "billing": 0.47,
+            "other": 0.25
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 90,
+        "output_tokens": 16
+      }
+    }
+  },
+  "assert": {
+    "answers.team.type": "choice",
+    "answers.team.choice": "billing",
+    "answers.team.confidence": 0.21,
+    "answers.team.probabilities.billing": 0.47,
+    "answers.team.probabilities.other": 0.25
+  }
+}

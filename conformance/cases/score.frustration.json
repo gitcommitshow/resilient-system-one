@@ -1,0 +1,48 @@
+{
+  "id": "score.frustration",
+  "description": "A score answer is the mean level index, with a legend and a probability per level.",
+  "request": {
+    "state": "This is the third time I have written. Nobody has replied.",
+    "model": "example",
+    "questions": {
+      "frustration": {
+        "type": "score",
+        "instructions": "How frustrated is the writer?",
+        "criteria": ["Calm", "Annoyed", "Very angry"]
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "model": "example-1.0.0",
+      "answers": {
+        "frustration": {
+          "type": "score",
+          "score": 1.44,
+          "confidence": 0.34,
+          "legend": {
+            "0": "Calm",
+            "1": "Annoyed",
+            "2": "Very angry"
+          },
+          "probabilities": {
+            "0": 0.0,
+            "1": 0.56,
+            "2": 0.44
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 55,
+        "output_tokens": 11
+      }
+    }
+  },
+  "assert": {
+    "answers.frustration.type": "score",
+    "answers.frustration.score": 1.44,
+    "answers.frustration.legend.1": "Annoyed",
+    "answers.frustration.probabilities.2": 0.44
+  }
+}
