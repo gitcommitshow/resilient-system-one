@@ -1,0 +1,21 @@
+# Clients that implement spec/v1.
+#
+# status:
+#   official   - a maintainer of this repository is responsible
+#   community  - the external repository is responsible
+#
+# conformance:
+#   pending - not yet checked against conformance/cases
+#   passing - the client's CI runs conformance/cases
+#
+# A new language starts as an external repository with status community.
+# See docs/CONTRIBUTING.md.
+
+sdks:
+  - language: typescript
+    package: resilient-system-one
+    registry: https://www.npmjs.com/package/resilient-system-one
+    repository: packages/sdk
+    specVersion: 1.0.0-draft
+    status: official
+    conformance: pending

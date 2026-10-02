@@ -1,0 +1,38 @@
+name: New SDK
+description: Propose a System One client for another language
+title: "sdk: "
+labels: ["sdk"]
+body:
+  - type: input
+    id: language
+    attributes:
+      label: Language
+    validations:
+      required: true
+  - type: input
+    id: package
+    attributes:
+      label: Package name
+      description: The name you will publish. system-one is taken on npm and PyPI.
+    validations:
+      required: true
+  - type: input
+    id: maintainer
+    attributes:
+      label: Maintainer
+    validations:
+      required: true
+  - type: input
+    id: spec
+    attributes:
+      label: Spec version
+      placeholder: 1.0.0-draft
+    validations:
+      required: true
+  - type: textarea
+    id: repo
+    attributes:
+      label: Repository
+      description: Where the code will live. New languages start outside this repo.
+    validations:
+      required: true

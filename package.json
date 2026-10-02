@@ -1,0 +1,18 @@
+{
+  "name": "system-one",
+  "private": true,
+  "license": "Apache-2.0",
+  "description": "Independent System One specification and client SDKs.",
+  "workspaces": [
+    "packages/sdk"
+  ],
+  "scripts": {
+    "test": "npm test -w resilient-system-one",
+    "test:e2e": "npm run test:e2e -w resilient-system-one",
+    "build": "npm run build -w resilient-system-one",
+    "typecheck": "npm run typecheck -w resilient-system-one"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
