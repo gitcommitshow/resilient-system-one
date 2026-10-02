@@ -13,8 +13,8 @@
 
 sdks:
   - language: typescript
-    package: "@system-one/sdk"
-    registry: https://www.npmjs.com/package/@system-one/sdk
+    package: resilient-system-one
+    registry: https://www.npmjs.com/package/resilient-system-one
     repository: packages/sdk
     specVersion: 1.0.0-draft
     status: official

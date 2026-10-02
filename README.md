@@ -97,7 +97,7 @@ By submitting a change you agree it is licensed under Apache-2.0 ([LICENSE](LICE
 1. Edit [spec/v1/spec.md](spec/v1/spec.md) and [spec/v1/openapi.yaml](spec/v1/openapi.yaml) in the same pull request.
 2. Add or update a case in [conformance/cases/](conformance/cases/).
 3. Note the change in [spec/v1/changelog.md](spec/v1/changelog.md).
-4. If `@system-one/sdk` would misread the new contract, update `packages/sdk` in that same pull request.
+4. If `resilient-system-one` would misread the new contract, update `packages/sdk` in that same pull request.
 
 A clarification stays in `spec/v1/`. A wire break starts `spec/v2/` and leaves v1 in the tree. A break is a removed field, a renamed field, or a new meaning for `noul`, `choice`, or `score`. An optional response field is not a break.
 
