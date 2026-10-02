@@ -1,0 +1,8 @@
+System One
+Copyright 2026 The System One Authors
+
+This project is an independent specification and client for the System One
+decision HTTP API. Version 1 of the wire format follows the public contract
+introduced by TypeSafe AI (POST /v1/systemone, with noul, choice, and score
+questions). This project is not affiliated with TypeSafe AI or with any model
+provider listed in registry/providers.yaml.
