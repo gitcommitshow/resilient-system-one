@@ -1,0 +1,336 @@
+openapi: 3.1.0
+info:
+  title: System One
+  version: 1.0.0-draft
+  license:
+    name: Apache-2.0
+    identifier: Apache-2.0
+  description: |
+    Independent HTTP contract for System One decision models.
+    A client sends application state and typed questions.
+    A server returns one typed answer per question, with probabilities.
+    Human-readable requirements live in spec.md. If this file and spec.md
+    disagree, spec.md wins.
+
+servers:
+  - url: https://api.example.com
+    description: Replace with the provider base URL from registry/providers.yaml.
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: decisions
+    description: Evaluate state and list models.
+
+paths:
+  /v1/systemone:
+    post:
+      operationId: evaluate
+      tags: [decisions]
+      summary: Evaluate state against typed questions
+      description: |
+        Every question is answered against the same state and independently
+        of the other questions. The question id is a correlation key.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EvaluateRequest"
+      responses:
+        "200":
+          description: One answer per question.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvaluateResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "413":
+          $ref: "#/components/responses/TooLarge"
+        "422":
+          $ref: "#/components/responses/Invalid"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+
+  /v1/models:
+    get:
+      operationId: listModels
+      tags: [decisions]
+      summary: List model names the caller may send
+      responses:
+        "200":
+          description: Model cards available to this credential.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelList"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+  responses:
+    Unauthorized:
+      description: Missing or rejected credential.
+    TooLarge:
+      description: The server refused the request because it exceeds a documented limit.
+    Invalid:
+      description: The request body failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorBody"
+    RateLimited:
+      description: Too many requests. Retry-After may be set.
+      headers:
+        Retry-After:
+          schema:
+            type: string
+
+  schemas:
+    State:
+      description: Text, a JSON object, or a JSON array. All questions in the request refer to it.
+      oneOf:
+        - type: string
+        - type: object
+          additionalProperties: true
+        - type: array
+          items: {}
+
+    RichText:
+      description: A plain string, or structured context the question can refer to by field name.
+      oneOf:
+        - type: string
+        - type: object
+          additionalProperties: true
+        - type: array
+          items: {}
+
+    EvaluateRequest:
+      type: object
+      additionalProperties: false
+      required: [state, model, questions]
+      properties:
+        state:
+          $ref: "#/components/schemas/State"
+        model:
+          type: string
+          minLength: 1
+          description: Model name or alias. The response model field may be a more specific id.
+        questions:
+          type: object
+          minProperties: 1
+          additionalProperties:
+            $ref: "#/components/schemas/Question"
+          description: Caller-chosen ids. Answers return under the same ids.
+
+    Question:
+      oneOf:
+        - $ref: "#/components/schemas/NoulQuestion"
+        - $ref: "#/components/schemas/ChoiceQuestion"
+        - $ref: "#/components/schemas/ScoreQuestion"
+      discriminator:
+        propertyName: type
+        mapping:
+          noul: "#/components/schemas/NoulQuestion"
+          choice: "#/components/schemas/ChoiceQuestion"
+          score: "#/components/schemas/ScoreQuestion"
+
+    NoulQuestion:
+      type: object
+      additionalProperties: false
+      required: [type]
+      properties:
+        type:
+          const: noul
+        instructions:
+          $ref: "#/components/schemas/RichText"
+        criteria:
+          oneOf:
+            - $ref: "#/components/schemas/NoulCriteria"
+            - type: "null"
+
+    NoulCriteria:
+      type: object
+      additionalProperties: false
+      properties:
+        "true":
+          oneOf:
+            - $ref: "#/components/schemas/RichText"
+            - type: "null"
+        "false":
+          oneOf:
+            - $ref: "#/components/schemas/RichText"
+            - type: "null"
+
+    ChoiceQuestion:
+      type: object
+      additionalProperties: false
+      required: [type, criteria]
+      properties:
+        type:
+          const: choice
+        instructions:
+          $ref: "#/components/schemas/RichText"
+        criteria:
+          type: object
+          minProperties: 1
+          maxProperties: 255
+          additionalProperties:
+            oneOf:
+              - $ref: "#/components/schemas/RichText"
+              - type: "null"
+
+    ScoreQuestion:
+      type: object
+      additionalProperties: false
+      required: [type, criteria]
+      properties:
+        type:
+          const: score
+        instructions:
+          $ref: "#/components/schemas/RichText"
+        criteria:
+          type: array
+          minItems: 2
+          items:
+            $ref: "#/components/schemas/RichText"
+
+    EvaluateResponse:
+      type: object
+      additionalProperties: true
+      required: [model, answers, usage]
+      properties:
+        model:
+          type: string
+          minLength: 1
+          description: The model id that answered. May differ from the requested alias.
+        answers:
+          type: object
+          minProperties: 1
+          additionalProperties:
+            $ref: "#/components/schemas/Answer"
+        usage:
+          $ref: "#/components/schemas/Usage"
+
+    Answer:
+      oneOf:
+        - $ref: "#/components/schemas/NoulAnswer"
+        - $ref: "#/components/schemas/ChoiceAnswer"
+        - $ref: "#/components/schemas/ScoreAnswer"
+      discriminator:
+        propertyName: type
+        mapping:
+          noul: "#/components/schemas/NoulAnswer"
+          choice: "#/components/schemas/ChoiceAnswer"
+          score: "#/components/schemas/ScoreAnswer"
+
+    Probability:
+      type: number
+      minimum: 0
+      maximum: 1
+
+    NoulAnswer:
+      type: object
+      additionalProperties: true
+      required: [type, noul]
+      properties:
+        type:
+          const: noul
+        noul:
+          $ref: "#/components/schemas/Probability"
+          description: Probability that the answer is yes.
+        confidence:
+          $ref: "#/components/schemas/Probability"
+
+    ChoiceAnswer:
+      type: object
+      additionalProperties: true
+      required: [type, choice, probabilities, confidence]
+      properties:
+        type:
+          const: choice
+        choice:
+          type: string
+          description: One of the option names from the question criteria.
+        probabilities:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/Probability"
+        confidence:
+          $ref: "#/components/schemas/Probability"
+
+    ScoreAnswer:
+      type: object
+      additionalProperties: true
+      required: [type, score, legend, probabilities, confidence]
+      properties:
+        type:
+          const: score
+        score:
+          type: number
+          minimum: 0
+          description: Probability-weighted mean of level indexes. Index 0 is the first level.
+        legend:
+          type: object
+          additionalProperties:
+            type: string
+          description: Level index (as a string) to the level text the server scored.
+        probabilities:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/Probability"
+        confidence:
+          $ref: "#/components/schemas/Probability"
+
+    Usage:
+      type: object
+      additionalProperties: true
+      required: [input_tokens, output_tokens]
+      properties:
+        input_tokens:
+          type: integer
+          minimum: 0
+        output_tokens:
+          type: integer
+          minimum: 0
+
+    ModelList:
+      description: |
+        Draft form. See the open questions in spec.md before treating a
+        different envelope as non-conformant.
+      type: array
+      items:
+        $ref: "#/components/schemas/ModelCard"
+
+    ModelCard:
+      type: object
+      additionalProperties: true
+      required: [name]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        description:
+          type: string
+        release_date:
+          type: string
+
+    ErrorBody:
+      type: object
+      additionalProperties: true
+      properties:
+        detail:
+          description: Either a human-readable string or a list of field errors.
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: object
+                additionalProperties: true
