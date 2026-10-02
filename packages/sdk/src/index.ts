@@ -99,8 +99,8 @@ export class SystemOneError extends Error {
 }
 
 /**
- * Calls POST /v1/systemone on any server that implements the spec.
- * The same questions work across servers. Change baseUrl and model to switch.
+ * Resilient client for System One models that follow the spec, such as Jev, Laya, and Kev.
+ * Change baseUrl and model to switch. The questions stay the same.
  */
 export class SystemOneClient {
   private readonly options: SystemOneClientOptions;

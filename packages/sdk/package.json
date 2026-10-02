@@ -1,7 +1,16 @@
 {
   "name": "resilient-system-one",
   "version": "1.0.0",
-  "description": "TypeScript client for the System One decision API.",
+  "description": "Resilient integration with System One models that follow the spec. Switch models with a config change.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gitcommitshow/resilient-system-one.git",
+    "directory": "packages/sdk"
+  },
+  "homepage": "https://github.com/gitcommitshow/resilient-system-one/tree/main/packages/sdk#readme",
+  "bugs": {
+    "url": "https://github.com/gitcommitshow/resilient-system-one/issues"
+  },
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
