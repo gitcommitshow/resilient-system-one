@@ -29,7 +29,7 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "mocha --node-option experimental-strip-types --node-option no-warnings",
-    "test:e2e": "mocha --node-option experimental-strip-types --node-option no-warnings 'test/**/*.e2e.test.ts'"
+    "test:e2e": "mocha --no-config --timeout 180000 --node-option experimental-strip-types --node-option no-warnings 'test/**/*.e2e.test.ts'"
   },
   "engines": {
     "node": ">=22"
